@@ -32,15 +32,6 @@ struct CustomFontsScene: View {
             .navigationTitle("Custom")
         }
         .navigationViewStyle(.stack)
-        .sheet(isPresented: $viewModel.importPresented) {
-            DocumentPicker(
-                importType: viewModel.selectedCustomFontType,
-                ttcRepackMode: viewModel.importTTCRepackMode
-            )
-        }
-        .sheet(isPresented: $viewModel.isPresentedFileEditor) {
-            FileEditorView()
-        }
         .onAppear {
             Task(priority: .background) {
                 do {
@@ -73,6 +64,12 @@ struct CustomFontsScene: View {
                     text: "Import custom \(viewModel.selectedCustomFontType.rawValue)"
                 )
             }
+            .sheet(isPresented: $viewModel.importPresented) {
+                DocumentPicker(
+                    importType: viewModel.selectedCustomFontType,
+                    ttcRepackMode: viewModel.importTTCRepackMode
+                )
+            }
             Button {
                 progressManager.isBusy = true
                 progressManager.message = "Running"
@@ -99,6 +96,9 @@ struct CustomFontsScene: View {
                     imageName: "doc.badge.gearshape",
                     text: "Manage imported fonts"
                 )
+            }
+            .sheet(isPresented: $viewModel.isPresentedFileEditor) {
+                FileEditorView()
             }
             ActionButtons()
         } header: {
